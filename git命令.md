@@ -1,4 +1,4 @@
-本地创建git
+**本地创建git**
 
   1、（先进入项目文件夹）通过命令 gitinit 把这个目录变成git可以管理的仓库  
      `git init`  
@@ -15,11 +15,10 @@
 或：  
      ` git remote rm origin   //删除origin`
 
-      `git remote add origin git@git.oschina.net:yourname/demo.git   //重新添加origin`
+    git remote add origin git@git.oschina.net:yourname/demo.git   //重新添加origin
 
 
-
-git 回退  
+**git 回退 ** 
 
 
   查看提交历史（整个工程）  

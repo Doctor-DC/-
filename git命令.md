@@ -18,7 +18,7 @@
     git remote add origin git@git.oschina.net:yourname/demo.git   //重新添加origin
 
 
-**git 回退 ** 
+**git 回退**
 
 
   查看提交历史（整个工程）  

@@ -19,13 +19,13 @@
 
 
 
-git 回退
+git 回退  
 
 
-  查看提交历史（整个工程）
-     `git log`
-  查看命令历史（本地）
-     `git reflog`  
+  查看提交历史（整个工程）  
+     `git log`  
+  查看命令历史（本地）  
+     `git reflog`    
      
-  HEAD指向当前版本
-     `git reset --hard commit_id`
+  HEAD指向当前版本  
+     `git reset --hard commit_id`  

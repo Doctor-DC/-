@@ -28,5 +28,6 @@
      
   回退本地版本，HEAD指向当前版本  
      `git reset --hard commit_id`  
+     
   强制回退远程版本   
 `git push -f origin master ## 这里假设只有一个master分支`

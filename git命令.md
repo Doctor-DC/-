@@ -31,3 +31,7 @@
      
   强制回退远程版本   
 `git push -f origin master ## 这里假设只有一个master分支`
+
+
+**删除git remote**
+    https://blog.csdn.net/luodao_/article/details/79041918

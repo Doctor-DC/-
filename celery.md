@@ -5,4 +5,6 @@
 `celery -A s2 worker -l info -P eventlet`
 
 启动celery监控  
-`celery flower -A s2`
+`celery flower -A s2`  
+
+flower  地址http://localhost:5555

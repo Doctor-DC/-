@@ -1,0 +1,230 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>server-side-pagination</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../static/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../static/assets/bootstrap-table/src/bootstrap-table.css">
+    <link rel="stylesheet" href="../../static/assets/examples.css">
+    <script src="../../static/assets/jquery.min.js"></script>
+    <script src="../../static/assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../../static/assets/bootstrap-table/src/bootstrap-table.js"></script>
+    <script src="../../static/ga.js"></script>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Server Side Pagination S2</h1>
+         <div id="toolbar" class="btn-group">
+                            <button id="btn_play" type="button" class="btn btn-info btn-sm rightSize">
+                                <span class="glyphicon glyphicon glyphicon-play" aria-hidden="true"></span>启动
+                            </button>
+                            <button id="btn_pause" type="button" class="btn btn-info btn-sm rightSize" >
+                                <span class="glyphicon glyphicon glyphicon-pause" aria-hidden="true"></span>关闭
+                            </button>
+                            <button id="btn_delete" type="button" class="btn btn-info btn-sm rightSize">
+                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除
+                            </button>
+                        </div>
+        <table id="taskList_table" class="table-striped table-hover" data-mobile-responsive="true"></table>
+        <table id="table">
+        </table>
+    </div>
+</body>
+<script>
+    function initTable () {
+       $('#table').bootstrapTable({
+
+	            ajaxOptions:{
+                            headers: {"Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjbXBfYWRtaW4iLCJhdXRoIjoiUk9MRV9TWVMiLCJhY2Nlc3NBcHBsaWNhdGlvbklkIjo0LCJ1dWlkIjoiNDI3YWIwMDgtZTk4Zi00ZjUzLWIzZDctOTJkZTFhNGQ4OTNkIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9TWVMiXSwicmVzb3VyY2VDb2RlcyI6W10sInBob25lIjoiIiwidXNlclN0YXRlIjoiMSIsImxkYXBJZCI6MSwidXNlclR5cGUiOiI0IiwiZXhwIjoxNTI4OTQ5MjM0LCJhdXRoVHlwZSI6MiwiYXBwbGljYXRpb25JZCI6MiwiZW1haWwiOiIiLCJ1c2VybmFtZSI6ImNtcF9hZG1pbiJ9.e5M-jZ0XG9lONHyCRHCJuUsCBRR125q6sW7H965RATeONOpuQpROcTyXb4K0R1b_9-MmcDnQGU_N1MDKBjpKwA",
+                                      "DcCode": "LFRZ1"
+
+                            }
+                        },
+
+               url:"http://127.0.0.1:8000/s2asyn/describe",
+               queryParams:queryParams,
+	           cache: false,
+            striped: true,
+            pagination: true,
+            pageList: [5, 10, 15,30, 50, 100],
+            <!--pageSize: 15,-->
+            <!--pageNumber: 1,-->
+            onlyInfoPagination: false,
+            paginationHAlign:"right",
+            paginationPreText: "Previous",
+            paginationNextText: "Next",
+            paginationFirstText: "First",
+            paginationLastText: "Last",
+            responseHandler: responseHandler,
+
+
+
+            toolbar: '#toolbar',
+            sortOrder: "",
+            search: true,
+            queryParamsType: "limit",
+            sidePagination: "server",//设置为服务器端分页
+            showPaginationSwitch	: true,
+            showColumns: true,
+            showRefresh: true,
+            showToggle: true,
+            minimumCountColumns: 2,
+            clickToSelect: true,
+            smartDisplay: true,
+
+            onLoadSuccess : function (msg) {
+                        console.log(msg);
+                        var s2 = msg.rows;
+                        <!--$('#table').bootstrapTable('load', s2);-->
+                    },
+
+                    onLoadError:function(){
+                        alert("错误");
+                    },
+
+                columns: [{
+                        field: "state",
+                        checkbox:true,
+                    },{
+                        field: 's2_server_id',
+                        title: 'S2ID',
+                        switchable: true
+                    },{
+                        field: 's2_server_name',
+                        title: '名称',
+                        switchable: true
+                    },{
+                        field: 'status',
+                        title: '状态',
+                        switchable: true
+                    }, {
+                        field: 'owner',
+                        title: '创建用户',
+                        switchable: true
+                    },{
+                        field: 'vxnet.vxnet_name',
+                        title: '网络',
+                        switchable: true
+                    }, {
+                        field: 'create_time',
+                        title: '创建时间',
+                        switchable: true
+                    },{
+                      field: 'button',
+                      title: '操作',
+                      <!--events: operateEvents,-->
+                      formatter: operateFormatter, //自定义方法，添加操作按钮
+                  }
+                 ],
+        });
+    }
+
+
+
+                function queryParams(params) {
+                    var param = {
+                        pageNum : params.offset,
+                        pageSize : params.limit,
+                        search_word : params.search,
+                    };
+                    console.log(JSON.stringify(params));
+                    console.log(param);
+                    return param;
+                 }
+
+           function responseHandler(e) {
+              console.log(e);
+
+              return { "total": e.content.total_count ,"rows": e.content.s2_server_set};
+
+
+            }
+
+             var operateFormatter = function (value, row, index) {//赋予的参数
+                  return [
+                      '<button class="btn btn-info btn-sm rightSize detailBtn" type="button"><i class="fa fa-paste"></i> 详情</button>',
+                      '<button class="btn btn-danger btn-sm rightSize packageBtn" type="button"><i class="fa fa-envelope"></i> 编辑</button>'
+                  ].join('');
+              }
+
+     initTable();
+
+     $("#btn_pause").click(function () {
+    //获取所有被选中的记录
+    var rows = $("#table").bootstrapTable('getSelections');
+    if (rows.length== 0) {
+        alert("请先选择要停止的记录!");
+        return;
+    }
+    var ids = '';
+    for (var i = 0; i < rows.length; i++) {
+        ids += rows[i]['s2_server_id'] + " ";
+    }
+    ids = ids.substring(0, ids.length - 1);
+    pauseS2(ids);
+    })
+
+    function pauseS2(ids) {
+    var msg = "您真的确定要停止吗？";
+    if (confirm(msg) == true) {
+        $.ajax({
+
+            headers: {"Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjbXBfYWRtaW4iLCJhdXRoIjoiUk9MRV9TWVMiLCJhY2Nlc3NBcHBsaWNhdGlvbklkIjo0LCJ1dWlkIjoiNDI3YWIwMDgtZTk4Zi00ZjUzLWIzZDctOTJkZTFhNGQ4OTNkIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9TWVMiXSwicmVzb3VyY2VDb2RlcyI6W10sInBob25lIjoiIiwidXNlclN0YXRlIjoiMSIsImxkYXBJZCI6MSwidXNlclR5cGUiOiI0IiwiZXhwIjoxNTI4OTQ5MjM0LCJhdXRoVHlwZSI6MiwiYXBwbGljYXRpb25JZCI6MiwiZW1haWwiOiIiLCJ1c2VybmFtZSI6ImNtcF9hZG1pbiJ9.e5M-jZ0XG9lONHyCRHCJuUsCBRR125q6sW7H965RATeONOpuQpROcTyXb4K0R1b_9-MmcDnQGU_N1MDKBjpKwA",
+                      "DcCode": "LFRZ1"
+                        },
+            url: "http://127.0.0.1:8000/s2/poweroff/"+ids,
+            type: "post",
+            data: {
+                ids: ids
+            },
+            success: function (data) {
+                alert('停止S2成功');
+                //重新加载记录
+                //重新加载数据
+                $("#table").bootstrapTable('refresh');
+            }
+        });
+     }
+     }
+
+
+     $("#btn_play").click(function () {
+        //获取所有被选中的记录
+        var rows = $("#table").bootstrapTable('getSelections');
+        if (rows.length== 0) {
+            alert("请先选择要启动的s2!");
+            return;
+        }
+        var ids = '';
+        for (var i = 0; i < rows.length; i++) {
+            ids += rows[i]['s2_server_id'] + " ";
+        }
+        ids = ids.substring(0, ids.length - 1);
+        playS2(ids);
+        })
+
+        function playS2(ids) {
+        var msg = "您真的确定要启动吗？";
+        if (confirm(msg) == true) {
+            $.ajax({
+
+                headers: {"Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjbXBfYWRtaW4iLCJhdXRoIjoiUk9MRV9TWVMiLCJhY2Nlc3NBcHBsaWNhdGlvbklkIjo0LCJ1dWlkIjoiNDI3YWIwMDgtZTk4Zi00ZjUzLWIzZDctOTJkZTFhNGQ4OTNkIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9TWVMiXSwicmVzb3VyY2VDb2RlcyI6W10sInBob25lIjoiIiwidXNlclN0YXRlIjoiMSIsImxkYXBJZCI6MSwidXNlclR5cGUiOiI0IiwiZXhwIjoxNTI4OTQ5MjM0LCJhdXRoVHlwZSI6MiwiYXBwbGljYXRpb25JZCI6MiwiZW1haWwiOiIiLCJ1c2VybmFtZSI6ImNtcF9hZG1pbiJ9.e5M-jZ0XG9lONHyCRHCJuUsCBRR125q6sW7H965RATeONOpuQpROcTyXb4K0R1b_9-MmcDnQGU_N1MDKBjpKwA",
+                          "DcCode": "LFRZ1"
+                            },
+                url: "http://127.0.0.1:8000/s2/poweron/"+ids,
+                type: "post",
+
+                success: function (ids) {
+                    alert('启动S2成功');
+                    $("#table").bootstrapTable('refresh');
+                }
+            });
+         }
+         }
+
+
+
+</script>
+</html>

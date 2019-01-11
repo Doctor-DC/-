@@ -17,6 +17,8 @@
 
     git remote add origin git@git.oschina.net:yourname/demo.git   //重新添加origin
 
+   5.删除多remote中单个
+    https://blog.csdn.net/luodao_/article/details/79041918
 
 **git 回退**
 
@@ -33,5 +35,3 @@
 `git push -f origin master ## 这里假设只有一个master分支`
 
 
-**删除git remote**
-    https://blog.csdn.net/luodao_/article/details/79041918

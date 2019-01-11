@@ -20,8 +20,11 @@
    5.删除多remote中单个
     https://blog.csdn.net/luodao_/article/details/79041918
 
-**工作流**
-git commit -m "代码提交信息"
+**工作流**  
+  
+  `git pull`
+  `git commit -m "代码提交信息"`
+  `git push origin master`
 
 **git 回退**
 

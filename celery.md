@@ -1,4 +1,7 @@
 ### window启动
+
+---
+
 1. 先启动django    
 `python manage.py runserver`  
 
@@ -19,6 +22,9 @@
 
 
 ### 异常：
+
+---
+
 ```
 /anaconda/anaconda3/lib/python3.6/site-packages/celery/backends/amqp.py:67: CPendingDeprecationWarning: 
     The AMQP result backend is scheduled for deprecation in     version 4.0 and removal in version v5.0.     Please use RPC backend or a persistent backend.
@@ -26,7 +32,7 @@
 
 ```
 原因解析:
-在celery 4.0中 rabbitmq 配置result_backbend方式变了,以前是跟broker一样:
+在celery 4.0中 rabbitmq 配置result_backbend方式变了,以前是跟broker一样:  
 `
 result_backend = 'amqp://guest:guest@localhost:5672//'
 `

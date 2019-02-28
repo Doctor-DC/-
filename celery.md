@@ -1,3 +1,80 @@
+****注****> pip install celery==3.1.25
+
+## 项目根目录
+### setting.py
+    
+```
+djcelery.setup_loader()           #运行时，Celery便会去查看INSTALLD_APPS下包含的所有app目录中的tasks.py文件，找到标记为task的方法，将它们注册为celery task。
+BROKER_URL= 'amqp://guest@localhost//'   #Broker代理地址
+CELERY_RESULT_BACKEND = 'amqp://guest@localhost//'         #分布式任务队列Backend数据存储地址
+CELERY_ACCEPT_CONTENT = ['json']
+```    
+  
+### celery.py  
+
+
+```
+from __future__ import absolute_import, unicode_literals
+import os
+from celery import Celery
+from django.conf import settings
+
+# set the default Django settings module for the 'celery' program.
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Recycle.settings')
+
+app = Celery('Recycle')
+
+# Using a string here means the worker doesn't have to serialize
+# the configuration object to child processes.
+# - namespace='CELERY' means all celery-related configuration keys
+#   should have a `CELERY_` prefix.
+# app.config_from_object('django.conf:settings', namespace='CELERY')
+
+app.config_from_object('django.conf:settings')#, namespace='CELERY') #版本
+
+# Load task modules from all registered Django app configs.
+# app.autodiscover_tasks()
+app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
+
+
+@app.task(bind=True)
+def debug_task(self):
+    print('Request: {0!r}'.format(self.request))
+```
+
+### init.py
+
+```
+from __future__ import absolute_import, unicode_literals
+
+# This will make sure the app is always imported when
+# Django starts so that shared_task will use this app.
+from .celery import app as celery_app
+
+__all__ = ['celery_app']
+```
+## app目录
+### tasks.py
+
+```
+from celery import shared_task
+import time
+
+
+
+@shared_task()
+def add(a, b):
+    time.sleep(10)
+    # print(a + b)
+    return a + b
+```
+
+### views.py
+```
+def ():
+   add.delay(1,2)
+```
+
 ### window启动
 
 ---
@@ -21,7 +98,7 @@
 
 
 
-### 异常：
+### celery4异常：
 
 ---
 

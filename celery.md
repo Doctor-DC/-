@@ -26,15 +26,18 @@
 
 ```
 原因解析:
-在celery 4.0中 rabbitmq 配置result_backbend方式变了:
-以前是跟broker一样:
+在celery 4.0中 rabbitmq 配置result_backbend方式变了,以前是跟broker一样:
+
+```
 result_backend = 'amqp://guest:guest@localhost:5672//'
-现在对应的是rpc配置:
+```
+ 
+现在setting对应的是rpc配置:
+
+```
 result_backend = 'rpc://'
+```
+
 
 参考链接:
 http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-event_queue_prefix
-
-============
-
-

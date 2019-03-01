@@ -1,5 +1,7 @@
-****注****> pip install celery==3.1.25
-
+# django-celery-tutorial
+![image](https://images2015.cnblogs.com/blog/870989/201607/870989-20160702162151906-1122811333.png)
+> pip install celery==3.1.25  
+ 
 ## 项目根目录
 ### setting.py
     
